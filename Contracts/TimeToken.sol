@@ -9,27 +9,27 @@ contract TimeToken {
     event Transfer(
         address indexed _from,
         address indexed _to,
-        uint256 _value
+        uint _value
     );
 
     event Approval(
         address indexed _owner,
         address indexed _spender,
-        uint256 _value
+        uint _value
     );
 
     //Link addresses to TimeToken balances
-    mapping (address => uint256) public balanceOf;
-    mapping (address => mapping (address => uint256)) public allowance;
+    mapping (address => uint) public balanceOf;
+    mapping (address => mapping (address => uint)) public allowance;
 
     //Contract constructor
-    function TimeToken(uint256 _intialSupply) public {
+    function TimeToken(uint _intialSupply) public {
         balanceOf[msg.sender] = _intialSupply;
         totalSupply = _intialSupply;
     }
 
     //Sending tokens from one address to another
-    function transfer(address _to, uint256 _value) public returns(bool success){
+    function transfer(address _to, uint _value) public returns(bool success){
         require(balanceOf[msg.sender] >= _value);
 
         balanceOf[msg.sender] -= _value;
@@ -40,7 +40,7 @@ contract TimeToken {
     }
 
     //Approve a valid transaction
-    function approve(address _spender, uint256 _value) public returns (bool success) {
+    function approve(address _spender, uint _value) public returns (bool success) {
         allowance[msg.sender][_spender] = _value;
 
         Approval(msg.sender, _spender, _value);
@@ -49,7 +49,7 @@ contract TimeToken {
     }
 
 
-    function trasferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+    function trasferFrom(address _from, address _to, uint _value) public returns (bool success) {
         require(_value <= balanceOf[_from]);
         require(_value <= allowance[_from][msg.sender]);
 
@@ -58,7 +58,7 @@ contract TimeToken {
 
         allowance[_from][msg.sender] -= _value;
         Transfer(_from, _to, _value);
-        
+
         return true;
     }
 
